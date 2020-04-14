@@ -365,8 +365,7 @@ var TextInput =
       Object.assign(otherProps, {
         // Browser's treat autocomplete "off" as "on"
         // https://bugs.chromium.org/p/chromium/issues/detail?id=468153#c164
-        // autoComplete: autoComplete === 'off' ? 'noop' : autoComplete,
-        autoComplete: autoComplete === 'off',
+        autoComplete: 'off',
         autoCorrect: 'off',
         classList: [classes.textinput],
         dir: 'auto',

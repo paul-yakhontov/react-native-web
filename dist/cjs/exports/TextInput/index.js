@@ -62,9 +62,9 @@ var normalizeEventHandler = function normalizeEventHandler(handler) {
 var isSelectionStale = function isSelectionStale(node, selection) {
   if (node && selection) {
     var selectionEnd = node.selectionEnd,
-        selectionStart = node.selectionStart;
+      selectionStart = node.selectionStart;
     var start = selection.start,
-        end = selection.end;
+      end = selection.end;
     return start !== selectionStart || end !== selectionEnd;
   }
 
@@ -80,7 +80,7 @@ var setSelection = function setSelection(node, selection) {
   try {
     if (isSelectionStale(node, selection)) {
       var start = selection.start,
-          end = selection.end; // workaround for Blink on Android: see https://github.com/text-mask/text-mask/issues/300
+        end = selection.end; // workaround for Blink on Android: see https://github.com/text-mask/text-mask/issues/300
 
       if (isAndroid) {
         setTimeout(function () {
@@ -90,207 +90,207 @@ var setSelection = function setSelection(node, selection) {
         node.setSelectionRange(start, end || start);
       }
     }
-  } catch (e) {}
+  } catch (e) { }
 };
 
 var TextInput =
-/*#__PURE__*/
-function (_Component) {
-  _inheritsLoose(TextInput, _Component);
+  /*#__PURE__*/
+  function (_Component) {
+    _inheritsLoose(TextInput, _Component);
 
-  function TextInput() {
-    var _this;
+    function TextInput() {
+      var _this;
 
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    _this = _Component.call.apply(_Component, [this].concat(args)) || this;
-
-    _this._handleBlur = function (e) {
-      var onBlur = _this.props.onBlur;
-      _TextInputState.default._currentlyFocusedNode = null;
-
-      if (onBlur) {
-        onBlur(e);
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
       }
-    };
 
-    _this._handleContentSizeChange = function () {
-      var _this$props = _this.props,
+      _this = _Component.call.apply(_Component, [this].concat(args)) || this;
+
+      _this._handleBlur = function (e) {
+        var onBlur = _this.props.onBlur;
+        _TextInputState.default._currentlyFocusedNode = null;
+
+        if (onBlur) {
+          onBlur(e);
+        }
+      };
+
+      _this._handleContentSizeChange = function () {
+        var _this$props = _this.props,
           onContentSizeChange = _this$props.onContentSizeChange,
           multiline = _this$props.multiline;
 
-      if (multiline && onContentSizeChange) {
-        var newHeight = _this._node.scrollHeight;
-        var newWidth = _this._node.scrollWidth;
+        if (multiline && onContentSizeChange) {
+          var newHeight = _this._node.scrollHeight;
+          var newWidth = _this._node.scrollWidth;
 
-        if (newHeight !== _this._nodeHeight || newWidth !== _this._nodeWidth) {
-          _this._nodeHeight = newHeight;
-          _this._nodeWidth = newWidth;
-          onContentSizeChange({
-            nativeEvent: {
-              contentSize: {
-                height: _this._nodeHeight,
-                width: _this._nodeWidth
+          if (newHeight !== _this._nodeHeight || newWidth !== _this._nodeWidth) {
+            _this._nodeHeight = newHeight;
+            _this._nodeWidth = newWidth;
+            onContentSizeChange({
+              nativeEvent: {
+                contentSize: {
+                  height: _this._nodeHeight,
+                  width: _this._nodeWidth
+                }
               }
-            }
-          });
+            });
+          }
         }
-      }
-    };
+      };
 
-    _this._handleChange = function (e) {
-      var _this$props2 = _this.props,
+      _this._handleChange = function (e) {
+        var _this$props2 = _this.props,
           onChange = _this$props2.onChange,
           onChangeText = _this$props2.onChangeText;
-      var text = e.nativeEvent.text;
+        var text = e.nativeEvent.text;
 
-      _this._handleContentSizeChange();
+        _this._handleContentSizeChange();
 
-      if (onChange) {
-        onChange(e);
-      }
+        if (onChange) {
+          onChange(e);
+        }
 
-      if (onChangeText) {
-        onChangeText(text);
-      }
+        if (onChangeText) {
+          onChangeText(text);
+        }
 
-      _this._handleSelectionChange(e);
-    };
+        _this._handleSelectionChange(e);
+      };
 
-    _this._handleFocus = function (e) {
-      var _this$props3 = _this.props,
+      _this._handleFocus = function (e) {
+        var _this$props3 = _this.props,
           clearTextOnFocus = _this$props3.clearTextOnFocus,
           onFocus = _this$props3.onFocus,
           selectTextOnFocus = _this$props3.selectTextOnFocus;
-      var node = _this._node;
-      _TextInputState.default._currentlyFocusedNode = _this._node;
+        var node = _this._node;
+        _TextInputState.default._currentlyFocusedNode = _this._node;
 
-      if (onFocus) {
-        onFocus(e);
-      }
+        if (onFocus) {
+          onFocus(e);
+        }
 
-      if (clearTextOnFocus) {
-        _this.clear();
-      }
+        if (clearTextOnFocus) {
+          _this.clear();
+        }
 
-      if (selectTextOnFocus) {
-        node && node.select();
-      }
-    };
+        if (selectTextOnFocus) {
+          node && node.select();
+        }
+      };
 
-    _this._handleKeyDown = function (e) {
-      // Prevent key events bubbling (see #612)
-      e.stopPropagation(); // Backspace, Escape, Tab, Cmd+Enter, and Arrow keys only fire 'keydown'
-      // DOM events
+      _this._handleKeyDown = function (e) {
+        // Prevent key events bubbling (see #612)
+        e.stopPropagation(); // Backspace, Escape, Tab, Cmd+Enter, and Arrow keys only fire 'keydown'
+        // DOM events
 
-      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'Backspace' || e.key === 'Escape' || e.key === 'Enter' && e.metaKey || e.key === 'Tab') {
-        _this._handleKeyPress(e);
-      }
-    };
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'Backspace' || e.key === 'Escape' || e.key === 'Enter' && e.metaKey || e.key === 'Tab') {
+          _this._handleKeyPress(e);
+        }
+      };
 
-    _this._handleKeyPress = function (e) {
-      var _this$props4 = _this.props,
+      _this._handleKeyPress = function (e) {
+        var _this$props4 = _this.props,
           blurOnSubmit = _this$props4.blurOnSubmit,
           multiline = _this$props4.multiline,
           onKeyPress = _this$props4.onKeyPress,
           onSubmitEditing = _this$props4.onSubmitEditing;
-      var blurOnSubmitDefault = !multiline;
-      var shouldBlurOnSubmit = blurOnSubmit == null ? blurOnSubmitDefault : blurOnSubmit;
+        var blurOnSubmitDefault = !multiline;
+        var shouldBlurOnSubmit = blurOnSubmit == null ? blurOnSubmitDefault : blurOnSubmit;
 
-      if (onKeyPress) {
-        var keyValue = e.key;
+        if (onKeyPress) {
+          var keyValue = e.key;
 
-        if (keyValue) {
-          e.nativeEvent = {
-            altKey: e.altKey,
-            ctrlKey: e.ctrlKey,
-            key: keyValue,
-            metaKey: e.metaKey,
-            shiftKey: e.shiftKey,
-            target: e.target
-          };
-          onKeyPress(e);
-        }
-      }
-
-      if (!e.isDefaultPrevented() && e.key === 'Enter' && !e.shiftKey) {
-        if ((blurOnSubmit || !multiline) && onSubmitEditing) {
-          // prevent "Enter" from inserting a newline
-          e.preventDefault();
-          e.nativeEvent = {
-            target: e.target,
-            text: e.target.value
-          };
-          onSubmitEditing(e);
+          if (keyValue) {
+            e.nativeEvent = {
+              altKey: e.altKey,
+              ctrlKey: e.ctrlKey,
+              key: keyValue,
+              metaKey: e.metaKey,
+              shiftKey: e.shiftKey,
+              target: e.target
+            };
+            onKeyPress(e);
+          }
         }
 
-        if (shouldBlurOnSubmit) {
-          // $FlowFixMe
-          _this.blur();
-        }
-      }
-    };
+        if (!e.isDefaultPrevented() && e.key === 'Enter' && !e.shiftKey) {
+          if ((blurOnSubmit || !multiline) && onSubmitEditing) {
+            // prevent "Enter" from inserting a newline
+            e.preventDefault();
+            e.nativeEvent = {
+              target: e.target,
+              text: e.target.value
+            };
+            onSubmitEditing(e);
+          }
 
-    _this._handleSelectionChange = function (e) {
-      var _this$props5 = _this.props,
+          if (shouldBlurOnSubmit) {
+            // $FlowFixMe
+            _this.blur();
+          }
+        }
+      };
+
+      _this._handleSelectionChange = function (e) {
+        var _this$props5 = _this.props,
           onSelectionChange = _this$props5.onSelectionChange,
           _this$props5$selectio = _this$props5.selection,
           selection = _this$props5$selectio === void 0 ? emptyObject : _this$props5$selectio;
 
-      if (onSelectionChange) {
-        try {
-          var node = e.target;
+        if (onSelectionChange) {
+          try {
+            var node = e.target;
 
-          if (isSelectionStale(node, selection)) {
-            var selectionStart = node.selectionStart,
+            if (isSelectionStale(node, selection)) {
+              var selectionStart = node.selectionStart,
                 selectionEnd = node.selectionEnd;
-            e.nativeEvent.selection = {
-              start: selectionStart,
-              end: selectionEnd
-            };
-            onSelectionChange(e);
-          }
-        } catch (e) {}
-      }
-    };
+              e.nativeEvent.selection = {
+                start: selectionStart,
+                end: selectionEnd
+              };
+              onSelectionChange(e);
+            }
+          } catch (e) { }
+        }
+      };
 
-    _this._setNode = function (component) {
-      _this._node = (0, _findNodeHandle.default)(component);
+      _this._setNode = function (component) {
+        _this._node = (0, _findNodeHandle.default)(component);
 
-      if (_this._node) {
-        _this._handleContentSizeChange();
-      }
-    };
+        if (_this._node) {
+          _this._handleContentSizeChange();
+        }
+      };
 
-    return _this;
-  }
-
-  var _proto = TextInput.prototype;
-
-  _proto.clear = function clear() {
-    this._node.value = '';
-  };
-
-  _proto.isFocused = function isFocused() {
-    return _TextInputState.default.currentlyFocusedField() === this._node;
-  };
-
-  _proto.componentDidMount = function componentDidMount() {
-    setSelection(this._node, this.props.selection);
-
-    if (document.activeElement === this._node) {
-      _TextInputState.default._currentlyFocusedNode = this._node;
+      return _this;
     }
-  };
 
-  _proto.componentDidUpdate = function componentDidUpdate() {
-    setSelection(this._node, this.props.selection);
-  };
+    var _proto = TextInput.prototype;
 
-  _proto.render = function render() {
-    var _this$props6 = this.props,
+    _proto.clear = function clear() {
+      this._node.value = '';
+    };
+
+    _proto.isFocused = function isFocused() {
+      return _TextInputState.default.currentlyFocusedField() === this._node;
+    };
+
+    _proto.componentDidMount = function componentDidMount() {
+      setSelection(this._node, this.props.selection);
+
+      if (document.activeElement === this._node) {
+        _TextInputState.default._currentlyFocusedNode = this._node;
+      }
+    };
+
+    _proto.componentDidUpdate = function componentDidUpdate() {
+      setSelection(this._node, this.props.selection);
+    };
+
+    _proto.render = function render() {
+      var _this$props6 = this.props,
         autoComplete = _this$props6.autoComplete,
         autoCorrect = _this$props6.autoCorrect,
         editable = _this$props6.editable,
@@ -339,70 +339,70 @@ function (_Component) {
         underlineColorAndroid = _this$props6.underlineColorAndroid,
         otherProps = _objectWithoutPropertiesLoose(_this$props6, ["autoComplete", "autoCorrect", "editable", "keyboardType", "multiline", "numberOfLines", "returnKeyType", "secureTextEntry", "blurOnSubmit", "clearTextOnFocus", "onChangeText", "onLayout", "onSelectionChange", "onSubmitEditing", "selection", "selectTextOnFocus", "spellCheck", "accessibilityViewIsModal", "allowFontScaling", "caretHidden", "clearButtonMode", "dataDetectorTypes", "disableFullscreenUI", "enablesReturnKeyAutomatically", "hitSlop", "inlineImageLeft", "inlineImagePadding", "inputAccessoryViewID", "keyboardAppearance", "maxFontSizeMultiplier", "needsOffscreenAlphaCompositing", "onAccessibilityTap", "onContentSizeChange", "onEndEditing", "onMagicTap", "onScroll", "removeClippedSubviews", "renderToHardwareTextureAndroid", "returnKeyLabel", "scrollEnabled", "selectionColor", "selectionState", "shouldRasterizeIOS", "textBreakStrategy", "textContentType", "underlineColorAndroid"]);
 
-    var type;
+      var type;
 
-    switch (keyboardType) {
-      case 'email-address':
-        type = 'email';
-        break;
+      switch (keyboardType) {
+        case 'email-address':
+          type = 'email';
+          break;
 
-      case 'number-pad':
-      case 'numeric':
-        type = 'number';
-        break;
+        case 'number-pad':
+        case 'numeric':
+          type = 'number';
+          break;
 
-      case 'phone-pad':
-        type = 'tel';
-        break;
+        case 'phone-pad':
+          type = 'tel';
+          break;
 
-      case 'search':
-      case 'web-search':
-        type = 'search';
-        break;
+        case 'search':
+        case 'web-search':
+          type = 'search';
+          break;
 
-      case 'url':
-        type = 'url';
-        break;
+        case 'url':
+          type = 'url';
+          break;
 
-      default:
-        type = 'text';
-    }
+        default:
+          type = 'text';
+      }
 
-    if (secureTextEntry) {
-      type = 'password';
-    }
+      if (secureTextEntry) {
+        type = 'password';
+      }
 
-    var component = multiline ? 'textarea' : 'input';
-    Object.assign(otherProps, {
-      // Browser's treat autocomplete "off" as "on"
-      // https://bugs.chromium.org/p/chromium/issues/detail?id=468153#c164
-      autoComplete: autoComplete === 'off' ? 'noop' : autoComplete,
-      autoCorrect: autoCorrect ? 'on' : 'off',
-      classList: [classes.textinput],
-      dir: 'auto',
-      enterkeyhint: returnKeyType,
-      onBlur: normalizeEventHandler(this._handleBlur),
-      onChange: normalizeEventHandler(this._handleChange),
-      onFocus: normalizeEventHandler(this._handleFocus),
-      onKeyDown: this._handleKeyDown,
-      onKeyPress: this._handleKeyPress,
-      onSelect: normalizeEventHandler(this._handleSelectionChange),
-      readOnly: !editable,
-      ref: this._setNode,
-      spellCheck: spellCheck != null ? spellCheck : autoCorrect
-    });
+      var component = multiline ? 'textarea' : 'input';
+      Object.assign(otherProps, {
+        // Browser's treat autocomplete "off" as "on"
+        // https://bugs.chromium.org/p/chromium/issues/detail?id=468153#c164
+        autoComplete: 'off',
+        autoCorrect: 'off',
+        classList: [classes.textinput],
+        dir: 'auto',
+        enterkeyhint: returnKeyType,
+        onBlur: normalizeEventHandler(this._handleBlur),
+        onChange: normalizeEventHandler(this._handleChange),
+        onFocus: normalizeEventHandler(this._handleFocus),
+        onKeyDown: this._handleKeyDown,
+        onKeyPress: this._handleKeyPress,
+        onSelect: normalizeEventHandler(this._handleSelectionChange),
+        readOnly: !editable,
+        ref: this._setNode,
+        spellCheck: spellCheck != null ? spellCheck : autoCorrect
+      });
 
-    if (multiline) {
-      otherProps.rows = numberOfLines;
-    } else {
-      otherProps.type = type;
-    }
+      if (multiline) {
+        otherProps.rows = numberOfLines;
+      } else {
+        otherProps.type = type;
+      }
 
-    return (0, _createElement.default)(component, otherProps);
-  };
+      return (0, _createElement.default)(component, otherProps);
+    };
 
-  return TextInput;
-}(_react.Component);
+    return TextInput;
+  }(_react.Component);
 
 TextInput.displayName = 'TextInput';
 TextInput.defaultProps = {
